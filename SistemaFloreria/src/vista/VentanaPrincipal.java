@@ -13,13 +13,9 @@ public class VentanaPrincipal extends JFrame {
         setLocationRelativeTo(null); // Centra la ventana en la pantalla
         setLayout(new BorderLayout());
 
-        // Creamos el panel de pestañas
         JTabbedPane pestañas = new JTabbedPane();
 
-        // --- CREAMOS PANELES "DE MENTIRA" POR AHORA ---
-        // Después vamos a crear clases separadas para cada uno de estos paneles
-        JPanel panelProductos = new JPanel();
-        panelProductos.add(new JLabel("Acá va la tabla de Productos"));
+        PanelProductos panelProductos = new PanelProductos();
         
         JPanel panelVentas = new JPanel();
         panelVentas.add(new JLabel("Acá va la pantalla de Ventas"));
@@ -38,7 +34,7 @@ public class VentanaPrincipal extends JFrame {
 
     // Método main para probar la ventana (después lo vamos a mover a una clase Main)
     public static void main(String[] args) {
-        // Esto hace que la ventana se vea con el estilo del sistema operativo (más lindo)
+        // Esto hace que la ventana se vea con el estilo del sistema operativo
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
