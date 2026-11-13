@@ -9,6 +9,18 @@ public class Producto {
     private int stock;
     private int stockMinimo;
     
+    
+    public Producto() {
+    }
+    
+    public Producto(String nombre, Categoria categoria, double precio, int stock, int stockMinimo) {
+        this.nombre = nombre;
+        this.categoria = categoria;
+        this.precio = precio;
+        this.stock = stock;
+        this.stockMinimo = stockMinimo;
+    }
+    
     public Producto(int id, String nombre, Categoria categoria,
     		double precio, int stock, int stockMinimo) {
 
@@ -22,6 +34,10 @@ public class Producto {
 	
 	public int getId() {
 	 return id;
+	}
+	
+	public void setId(int id) {
+        this.id = id;
 	}
 	
 	public String getNombre() {
@@ -39,6 +55,10 @@ public class Producto {
 	public int getStock() {
 	 return stock;
 	}
+	
+	public void setStock(int stock) {
+        this.stock = stock;
+    }
 	
 	public int getStockMinimo() {
 	 return stockMinimo;
