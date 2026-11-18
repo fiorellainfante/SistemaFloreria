@@ -10,6 +10,7 @@ public class Movimiento {
     private int cantidad;
     private LocalDateTime fecha;
     private String observacion;
+    private double precioUnitario;
 
     public Movimiento() {
     }
@@ -20,6 +21,7 @@ public class Movimiento {
         setCantidad(cantidad);
         setObservacion(observacion);
         setFecha(LocalDateTime.now());
+        setPrecioUnitario(0);
     }
 
     public Movimiento(int id, Producto producto, TipoMovimiento tipo, int cantidad, String observacion) {
@@ -29,6 +31,24 @@ public class Movimiento {
         setCantidad(cantidad);
         setObservacion(observacion);
         setFecha(LocalDateTime.now());
+        setPrecioUnitario(0);
+    }
+
+    public Movimiento(Producto producto, TipoMovimiento tipo, int cantidad,
+            String observacion, double precioUnitario) {
+        this(producto, tipo, cantidad, observacion);
+        setPrecioUnitario(precioUnitario);
+    }
+
+    public Movimiento(int id, Producto producto, TipoMovimiento tipo, int cantidad,
+            LocalDateTime fecha, String observacion, double precioUnitario) {
+        setId(id);
+        setProducto(producto);
+        setTipo(tipo);
+        setCantidad(cantidad);
+        setFecha(fecha);
+        setObservacion(observacion);
+        setPrecioUnitario(precioUnitario);
     }
 
     public void setId(int id) {
@@ -70,11 +90,46 @@ public class Movimiento {
         this.observacion = observacion;
     }
 
+    public void setPrecioUnitario(double precioUnitario) {
+        if (!Double.isFinite(precioUnitario) || precioUnitario < 0) {
+            throw new IllegalArgumentException("El precio unitario no es válido.");
+        }
+        this.precioUnitario = precioUnitario;
+    }
 
-    public int getId() { return id; }
-    public Producto getProducto() { return producto; }
-    public TipoMovimiento getTipo() { return tipo; }
-    public int getCantidad() { return cantidad; }
-    public LocalDateTime getFecha() { return fecha; }
-    public String getObservacion() { return observacion; }
+    public int getId() {
+        return id;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public TipoMovimiento getTipo() {
+        return tipo;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public double getImporteTotal() {
+        if (tipo == TipoMovimiento.VENTA) {
+            return cantidad * precioUnitario;
+        }
+
+        return 0;
+    }
 }
