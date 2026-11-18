@@ -18,6 +18,10 @@ public class InventarioService {
 	
 	public boolean agregarProducto(Producto producto) {
 
+	    if (producto == null || !producto.esValido()) {
+	        return false;
+	    }
+
 	    if (buscarProducto(producto.getId()) != null) {
 	        return false;
 	    }
@@ -73,7 +77,9 @@ public class InventarioService {
 	        return false;
 	    }
 
-	    producto.aumentarStock(cantidad);
+	    if (!producto.aumentarStock(cantidad)) {
+	        return false;
+	    }
 
 	    Movimiento movimiento = new Movimiento(
 	        movimientos.size() + 1,
@@ -85,6 +91,28 @@ public class InventarioService {
 
 	    movimientos.add(movimiento);
 
+	    return true;
+	}
+	
+	public boolean registrarDeterioro(Producto producto, int cantidad) {
+
+	    if (!productos.contains(producto)) {
+	        return false;
+	    }
+
+	    if (!producto.disminuirStock(cantidad)) {
+	        return false;
+	    }
+
+	    Movimiento movimiento = new Movimiento(
+	        movimientos.size() + 1,
+	        producto,
+	        TipoMovimiento.DETERIORO,
+	        cantidad,
+	        "Deterioro de producto"
+	    );
+
+	    movimientos.add(movimiento);
 	    return true;
 	}
 	

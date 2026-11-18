@@ -2,5 +2,6 @@ package modelo;
 
 public enum TipoMovimiento {
 	VENTA,
-    REPOSICION
+    REPOSICION,
+    DETERIORO
 }
