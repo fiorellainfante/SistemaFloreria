@@ -5,15 +5,17 @@ import java.awt.*;
 
 public class VentanaPrincipal extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
     public VentanaPrincipal() {
-        setTitle("Sistema de Gestión - Florería");
+        setTitle("Sistema de gestión de inventario - Florería");
         setSize(1000, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         JLabel titulo = new JLabel(
-                "Sistema de Gestión de Florería",
+                "Inventario de florería",
                 SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));

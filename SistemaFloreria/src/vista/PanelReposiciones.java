@@ -12,6 +12,7 @@ import java.util.List;
 
 public class PanelReposiciones extends JPanel {
 
+	private static final long serialVersionUID = 1L;
     private JComboBox<Producto> cmbProductos;
     private JSpinner spnCantidad;
     private JLabel lblStockActual;

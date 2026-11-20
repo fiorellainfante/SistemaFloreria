@@ -39,7 +39,6 @@ public class ProductoDAO {
             pstmt.setDouble(3, p.getPrecio());
             pstmt.setInt(4, p.getStock());
             pstmt.setInt(5, p.getStockMinimo());
-            pstmt.setString(6, p.getRutaImagen());
 
             int filasAfectadas = pstmt.executeUpdate();
 
@@ -110,7 +109,6 @@ public class ProductoDAO {
             pstmt.setDouble(3, p.getPrecio());
             pstmt.setInt(4, p.getStock());
             pstmt.setInt(5, p.getStockMinimo());
-            pstmt.setString(6, p.getRutaImagen());
             pstmt.setInt(7, p.getId());
 
             return pstmt.executeUpdate() > 0;
@@ -258,7 +256,6 @@ public class ProductoDAO {
         p.setPrecio(rs.getDouble("precio"));
         p.setStock(rs.getInt("stock"));
         p.setStockMinimo(rs.getInt("stock_minimo"));
-        p.setRutaImagen(rs.getString("ruta_imagen"));
 
         return p;
     }

@@ -14,6 +14,7 @@ import java.util.Locale;
 
 public class PanelVentas extends JPanel {
 
+	private static final long serialVersionUID = 1L;
     private JComboBox<Producto> cmbProductos;
     private JSpinner spnCantidad;
     private JLabel lblPrecio;
@@ -26,7 +27,7 @@ public class PanelVentas extends JPanel {
 
     public PanelVentas() {
         servicio = new InventarioService();
-        formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "AR"));
+        formatoMoneda = NumberFormat.getCurrencyInstance(Locale.of("es", "AR"));
 
         setLayout(new BorderLayout(15, 15));
         setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));

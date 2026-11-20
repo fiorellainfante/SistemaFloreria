@@ -9,7 +9,6 @@ public class Producto {
     private double precio;
     private int stock;
     private int stockMinimo;
-    private String rutaImagen;
 
     public Producto() {
     }
@@ -75,11 +74,6 @@ public class Producto {
         this.stockMinimo = stockMinimo;
     }
 
-    public void setRutaImagen(String rutaImagen) {
-        this.rutaImagen = (rutaImagen == null || rutaImagen.trim().isEmpty())
-                ? null : rutaImagen.trim();
-    }
-
     public int getId() {
         return id;
     }
@@ -102,10 +96,6 @@ public class Producto {
 
     public int getStockMinimo() {
         return stockMinimo;
-    }
-
-    public String getRutaImagen() {
-        return rutaImagen;
     }
 
     public boolean aumentarStock(int cantidad) {

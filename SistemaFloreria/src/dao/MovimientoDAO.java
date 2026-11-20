@@ -143,7 +143,6 @@ public class MovimientoDAO {
         p.setPrecio(rs.getDouble("precio"));
         p.setStock(rs.getInt("stock"));
         p.setStockMinimo(rs.getInt("stock_minimo"));
-        p.setRutaImagen(rs.getString("ruta_imagen"));
 
         String fechaString = rs.getString("fecha_hora");
         LocalDateTime fecha = LocalDateTime.parse(fechaString);

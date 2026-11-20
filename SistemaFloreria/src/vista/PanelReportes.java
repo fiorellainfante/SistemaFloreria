@@ -16,6 +16,7 @@ import java.util.Locale;
 
 public class PanelReportes extends JPanel {
 
+	private static final long serialVersionUID = 1L;
     private final InventarioService servicio;
     private final NumberFormat formatoMoneda;
     private final DateTimeFormatter formatoFecha;
@@ -35,7 +36,7 @@ public class PanelReportes extends JPanel {
 
     public PanelReportes() {
         servicio = new InventarioService();
-        formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "AR"));
+        formatoMoneda = NumberFormat.getCurrencyInstance(Locale.of("es", "AR"));
         formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         setLayout(new BorderLayout());

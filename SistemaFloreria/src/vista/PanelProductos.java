@@ -1,3 +1,4 @@
+
 package vista;
 
 import modelo.Producto;
@@ -9,12 +10,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PanelProductos extends JPanel {
-
+	
+	private static final long serialVersionUID = 1L;
     private JTable tablaProductos;
     private DefaultTableModel modeloTabla;
     private JTextField txtBuscar;
@@ -22,7 +23,6 @@ public class PanelProductos extends JPanel {
     private JButton btnEditar;
     private JButton btnEliminar;
     private JLabel lblCantidad;
-    private JLabel lblVistaPrevia;
 
     private final InventarioService servicio;
     private List<Producto> productosActuales = new ArrayList<>();
@@ -66,7 +66,7 @@ public class PanelProductos extends JPanel {
 
     private void crearTabla() {
         String[] columnas = {
-            "ID", "Imagen", "Nombre", "Categoría", "Precio", "Stock"
+            "ID", "Nombre", "Categoría", "Precio", "Stock"
         };
 
         modeloTabla = new DefaultTableModel(columnas, 0) {
@@ -80,11 +80,9 @@ public class PanelProductos extends JPanel {
                 switch (columnIndex) {
                     case 0:
                         return Integer.class;
-                    case 1:
-                        return ImageIcon.class;
-                    case 4:
+                    case 3:
                         return Double.class;
-                    case 5:
+                    case 4:
                         return Integer.class;
                     default:
                         return Object.class;
@@ -102,31 +100,25 @@ public class PanelProductos extends JPanel {
         tablaProductos.getColumnModel().getColumn(0).setPreferredWidth(45);
         tablaProductos.getColumnModel().getColumn(0).setMaxWidth(55);
 
-        tablaProductos.getColumnModel().getColumn(1).setPreferredWidth(65);
-        tablaProductos.getColumnModel().getColumn(1).setMaxWidth(75);
+        tablaProductos.getColumnModel().getColumn(1).setPreferredWidth(180);
 
-        tablaProductos.getColumnModel().getColumn(2).setPreferredWidth(150);
+        tablaProductos.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tablaProductos.getColumnModel().getColumn(2).setMaxWidth(120);
 
-        tablaProductos.getColumnModel().getColumn(3).setPreferredWidth(75);
-        tablaProductos.getColumnModel().getColumn(3).setMaxWidth(85);
+        tablaProductos.getColumnModel().getColumn(3).setPreferredWidth(80);
+        tablaProductos.getColumnModel().getColumn(3).setMaxWidth(90);
 
-        tablaProductos.getColumnModel().getColumn(4).setPreferredWidth(80);
-        tablaProductos.getColumnModel().getColumn(4).setMaxWidth(90);
+        tablaProductos.getColumnModel().getColumn(4).setPreferredWidth(55);
+        tablaProductos.getColumnModel().getColumn(4).setMaxWidth(65);
 
-        tablaProductos.getColumnModel().getColumn(5).setPreferredWidth(55);
-        tablaProductos.getColumnModel().getColumn(5).setMaxWidth(65);
-
-        tablaProductos.getColumnModel().getColumn(1)
-                .setCellRenderer(new ImageCellRenderer());
-        
         tablaProductos.getColumnModel().getColumn(0)
-        .setCellRenderer(centrarContenido());
+                .setCellRenderer(centrarContenido());
+
+        tablaProductos.getColumnModel().getColumn(3)
+                .setCellRenderer(centrarContenido());
 
         tablaProductos.getColumnModel().getColumn(4)
-        .setCellRenderer(centrarContenido());
-
-        tablaProductos.getColumnModel().getColumn(5)
-        .setCellRenderer(centrarContenido());
+                .setCellRenderer(centrarContenido());
 
         tablaProductos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
@@ -158,33 +150,10 @@ public class PanelProductos extends JPanel {
         });
 
         JScrollPane scrollPane = new JScrollPane(tablaProductos);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
+        scrollPane.setBorder(BorderFactory.createLineBorder(
+                new Color(220, 220, 220)));
 
-        lblVistaPrevia = new JLabel("Sin selección", SwingConstants.CENTER);
-        lblVistaPrevia.setPreferredSize(new Dimension(280, 280));
-        lblVistaPrevia.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(220, 220, 220)),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
-        lblVistaPrevia.setBackground(Color.WHITE);
-        lblVistaPrevia.setOpaque(true);
-
-        JPanel panelVistaPrevia = new JPanel(new BorderLayout(5, 5));
-        panelVistaPrevia.setBackground(getBackground());
-        panelVistaPrevia.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-
-        JLabel lblTituloPrevia = new JLabel("Vista previa");
-        lblTituloPrevia.setFont(new Font("Arial", Font.BOLD, 14));
-
-        panelVistaPrevia.add(lblTituloPrevia, BorderLayout.NORTH);
-        panelVistaPrevia.add(lblVistaPrevia, BorderLayout.CENTER);
-
-        JPanel panelCentro = new JPanel(new BorderLayout(10, 10));
-        panelCentro.setBackground(getBackground());
-        panelCentro.add(scrollPane, BorderLayout.CENTER);
-        panelCentro.add(panelVistaPrevia, BorderLayout.EAST);
-
-        add(panelCentro, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void crearBotones() {
@@ -225,13 +194,6 @@ public class PanelProductos extends JPanel {
         btnEditar.addActionListener(e -> editarProducto());
         btnEliminar.addActionListener(e -> eliminarProducto());
 
-        tablaProductos.getSelectionModel().addListSelectionListener(e -> {
-            if (e.getValueIsAdjusting()) {
-                return;
-            }
-            actualizarVistaPrevia();
-        });
-
         txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -264,7 +226,6 @@ public class PanelProductos extends JPanel {
         for (Producto producto : productosActuales) {
             modeloTabla.addRow(new Object[]{
                 producto.getId(),
-                cargarMiniatura(producto.getRutaImagen(), 45, 45),
                 producto.getNombre(),
                 producto.getCategoria(),
                 producto.getPrecio(),
@@ -273,59 +234,6 @@ public class PanelProductos extends JPanel {
         }
 
         lblCantidad.setText("Productos: " + productosActuales.size());
-        actualizarVistaPrevia();
-    }
-
-    private ImageIcon cargarMiniatura(String rutaImagen, int ancho, int alto) {
-        if (rutaImagen == null || rutaImagen.trim().isEmpty()) {
-            return null;
-        }
-
-        File archivo = new File(rutaImagen);
-
-        if (!archivo.exists()) {
-            return null;
-        }
-
-        ImageIcon original = new ImageIcon(archivo.getAbsolutePath());
-
-        if (original.getIconWidth() <= 0) {
-            return null;
-        }
-
-        Image escalada = original.getImage()
-                .getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
-
-        return new ImageIcon(escalada);
-    }
-
-    private void actualizarVistaPrevia() {
-        int filaSeleccionada = tablaProductos.getSelectedRow();
-
-        if (filaSeleccionada == -1) {
-            lblVistaPrevia.setIcon(null);
-            lblVistaPrevia.setText("Sin selección");
-            return;
-        }
-
-        int filaModelo = tablaProductos.convertRowIndexToModel(filaSeleccionada);
-
-        if (filaModelo >= productosActuales.size()) {
-            lblVistaPrevia.setIcon(null);
-            lblVistaPrevia.setText("Sin selección");
-            return;
-        }
-
-        Producto producto = productosActuales.get(filaModelo);
-        ImageIcon icono = cargarMiniatura(producto.getRutaImagen(), 250, 250);
-
-        if (icono != null) {
-            lblVistaPrevia.setIcon(icono);
-            lblVistaPrevia.setText("");
-        } else {
-            lblVistaPrevia.setIcon(null);
-            lblVistaPrevia.setText("Sin imagen");
-        }
     }
 
     private void agregarProducto() {
@@ -426,46 +334,10 @@ public class PanelProductos extends JPanel {
     public void actualizarDatos() {
         cargarProductos();
     }
-    
+
     private DefaultTableCellRenderer centrarContenido() {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(SwingConstants.CENTER);
         return renderer;
-    }
-
-    private static class ImageCellRenderer extends DefaultTableCellRenderer {
-
-        private final JLabel label = new JLabel();
-
-        public ImageCellRenderer() {
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setOpaque(true);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(
-                JTable table, Object value, boolean isSelected,
-                boolean hasFocus, int row, int column) {
-
-            if (isSelected) {
-                label.setBackground(table.getSelectionBackground());
-                label.setForeground(table.getSelectionForeground());
-            } else {
-                int filaModelo = table.convertRowIndexToModel(row);
-                label.setBackground(table.getBackground());
-                label.setForeground(table.getForeground());
-            }
-
-            if (value instanceof ImageIcon) {
-                label.setIcon((ImageIcon) value);
-                label.setText(null);
-            } else {
-                label.setIcon(null);
-                label.setText("—");
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-            }
-
-            return label;
-        }
     }
 }
