@@ -111,16 +111,7 @@ public class PanelProductos extends JPanel {
         tablaProductos.getColumnModel().getColumn(4).setPreferredWidth(55);
         tablaProductos.getColumnModel().getColumn(4).setMaxWidth(65);
 
-        tablaProductos.getColumnModel().getColumn(0)
-                .setCellRenderer(centrarContenido());
-
-        tablaProductos.getColumnModel().getColumn(3)
-                .setCellRenderer(centrarContenido());
-
-        tablaProductos.getColumnModel().getColumn(4)
-                .setCellRenderer(centrarContenido());
-
-        tablaProductos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(
                     JTable table, Object value, boolean isSelected,
@@ -128,6 +119,8 @@ public class PanelProductos extends JPanel {
 
                 Component componente = super.getTableCellRendererComponent(
                         table, value, isSelected, hasFocus, row, column);
+                
+                setHorizontalAlignment(SwingConstants.CENTER);
 
                 int filaModelo = table.convertRowIndexToModel(row);
 
@@ -144,10 +137,18 @@ public class PanelProductos extends JPanel {
                         }
                     }
                 }
-
+                
                 return componente;
             }
-        });
+        };
+        
+        for (int i = 0; i < tablaProductos.getColumnCount(); i++) {
+            tablaProductos.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
+
+        tablaProductos.setDefaultRenderer(Object.class, renderer);
+        tablaProductos.setDefaultRenderer(Integer.class, renderer);
+        tablaProductos.setDefaultRenderer(Double.class, renderer);
 
         JScrollPane scrollPane = new JScrollPane(tablaProductos);
         scrollPane.setBorder(BorderFactory.createLineBorder(
@@ -333,11 +334,5 @@ public class PanelProductos extends JPanel {
 
     public void actualizarDatos() {
         cargarProductos();
-    }
-
-    private DefaultTableCellRenderer centrarContenido() {
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-        renderer.setHorizontalAlignment(SwingConstants.CENTER);
-        return renderer;
     }
 }
