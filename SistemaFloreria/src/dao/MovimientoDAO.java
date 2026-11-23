@@ -16,13 +16,13 @@ public class MovimientoDAO {
 
     public boolean registrar(Movimiento m) {
 
-        try (Connection conn = ConexionDB.conectar()) {
+        try (Connection conexion = ConexionDB.conectar()) {
 
-            if (conn == null) {
+            if (conexion == null) {
                 return false;
             }
 
-            return registrar(conn, m);
+            return registrar(conexion, m);
 
         } catch (SQLException e) {
             System.out.println("Error al registrar movimiento: " + e.getMessage());
@@ -30,7 +30,7 @@ public class MovimientoDAO {
         }
     }
 
-    public boolean registrar(Connection conn, Movimiento m) throws SQLException {
+    public boolean registrar(Connection conexion, Movimiento m) throws SQLException {
 
         if (m == null || m.getProducto() == null
                 || m.getProducto().getId() <= 0) {
@@ -41,7 +41,7 @@ public class MovimientoDAO {
                 + "(id_producto, tipo_movimiento, cantidad, fecha_hora, observacion, precio_unitario) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
 
             pstmt.setInt(1, m.getProducto().getId());
             pstmt.setString(2, m.getTipo().name());
@@ -93,13 +93,13 @@ public class MovimientoDAO {
 
         List<Movimiento> lista = new ArrayList<>();
 
-        try (Connection conn = ConexionDB.conectar()) {
+        try (Connection conexion = ConexionDB.conectar()) {
 
-            if (conn == null) {
+            if (conexion == null) {
                 return lista;
             }
 
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
 
                 if (parametro != null) {
                     if (parametro instanceof Integer) {

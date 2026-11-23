@@ -9,11 +9,9 @@ import java.sql.PreparedStatement;
 
 public class ConexionDB {
 
-    private static final String URL = "jdbc:sqlite:floreria.db";
-
     public static Connection conectar() {
         try {
-            Connection conexion = DriverManager.getConnection(URL);
+        	Connection conexion = DriverManager.getConnection("jdbc:sqlite:floreria.db");
 
             try (Statement stmt = conexion.createStatement()) {
                 stmt.execute("PRAGMA foreign_keys = ON");
@@ -35,8 +33,7 @@ public class ConexionDB {
                 + "categoria TEXT NOT NULL, "
                 + "precio REAL NOT NULL, "
                 + "stock INTEGER NOT NULL, "
-                + "stock_minimo INTEGER NOT NULL, "
-                + "ruta_imagen TEXT"
+                + "stock_minimo INTEGER NOT NULL"
                 + ")";
 
         String sqlMovimientos = "CREATE TABLE IF NOT EXISTS movimientos ("
@@ -50,25 +47,22 @@ public class ConexionDB {
                 + "FOREIGN KEY(id_producto) REFERENCES productos(id)"
                 + ")";
 
-        try (Connection conn = conectar()) {
+        try (Connection conexion = conectar()) {
 
-            if (conn == null) {
+            if (conexion == null) {
                 return;
             }
 
-            try (Statement stmt = conn.createStatement()) {
+            try (Statement stmt = conexion.createStatement()) {
                 stmt.execute(sqlProductos);
                 stmt.execute(sqlMovimientos);
             }
 
             agregarColumnaSiNoExiste(
-                    conn, "productos", "ruta_imagen", "TEXT");
-
-            agregarColumnaSiNoExiste(
-                    conn, "movimientos", "precio_unitario",
+                    conexion, "movimientos", "precio_unitario",
                     "REAL NOT NULL DEFAULT 0");
 
-            insertarProductosIniciales(conn);
+            insertarProductosIniciales(conexion);
 
             System.out.println("Base de datos inicializada correctamente.");
 
@@ -78,12 +72,12 @@ public class ConexionDB {
         }
     }
 
-    private static void insertarProductosIniciales(Connection conn)
+    private static void insertarProductosIniciales(Connection conexion)
             throws SQLException {
 
         String sqlCantidad = "SELECT COUNT(*) FROM productos";
 
-        try (Statement stmt = conn.createStatement();
+        try (Statement stmt = conexion.createStatement();
              ResultSet rs = stmt.executeQuery(sqlCantidad)) {
 
             if (rs.next() && rs.getInt(1) > 0) {
@@ -95,19 +89,16 @@ public class ConexionDB {
                 + "(id, nombre, categoria, precio, stock, stock_minimo) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
 
             insertarProducto(pstmt, 1, "Rosa", "FLOR", 2500, 20, 5);
             insertarProducto(pstmt, 2, "Girasol", "FLOR", 1800, 20, 5);
             insertarProducto(pstmt, 3, "Lavanda", "FLOR", 2200, 20, 5);
             insertarProducto(pstmt, 4, "Margarita", "FLOR", 2000, 20, 5);
 
-            insertarProducto(pstmt, 5, "Semillas de girasol",
-                    "SEMILLA", 900, 20, 5);
-            insertarProducto(pstmt, 6, "Semillas de albahaca",
-                    "SEMILLA", 750, 20, 5);
-            insertarProducto(pstmt, 7, "Semillas de manzanilla",
-                    "SEMILLA", 700, 20, 5);
+            insertarProducto(pstmt, 5, "Semillas de girasol", "SEMILLA", 900, 20, 5);
+            insertarProducto(pstmt, 6, "Semillas de albahaca", "SEMILLA", 750, 20, 5);
+            insertarProducto(pstmt, 7, "Semillas de manzanilla", "SEMILLA", 700, 20, 5);
 
             insertarProducto(pstmt, 8, "Helecho", "PLANTA", 4500, 20, 5);
             insertarProducto(pstmt, 9, "Aloe vera", "PLANTA", 3800, 20, 5);
@@ -130,13 +121,13 @@ public class ConexionDB {
         pstmt.executeUpdate();
     }
 
-    private static void agregarColumnaSiNoExiste(Connection conn,
+    private static void agregarColumnaSiNoExiste(Connection conexion,
             String tabla, String columna, String tipo)
             throws SQLException {
 
         boolean existe = false;
 
-        try (Statement stmt = conn.createStatement();
+        try (Statement stmt = conexion.createStatement();
              ResultSet rs = stmt.executeQuery(
                      "PRAGMA table_info(" + tabla + ")")) {
 
@@ -149,7 +140,7 @@ public class ConexionDB {
         }
 
         if (!existe) {
-            try (Statement stmt = conn.createStatement()) {
+            try (Statement stmt = conexion.createStatement()) {
                 stmt.execute("ALTER TABLE " + tabla
                         + " ADD COLUMN " + columna + " " + tipo);
             }
